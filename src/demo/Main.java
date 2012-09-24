@@ -10,17 +10,28 @@ package demo;
  * http://fazlansabar.blogspot.com.au/2012/06/apache-lucene-tutorial-lucene-for-text.html
  * Credit: http://lucene.apache.org/core/
  */
+
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.search.spell.Dictionary;
+import org.apache.lucene.search.spell.LuceneDictionary;
+import org.apache.lucene.search.spell.PlainTextDictionary;
+import org.apache.lucene.search.spell.SpellChecker;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Main {
@@ -31,24 +42,37 @@ public class Main {
 	private static ArrayList<File> queue = new ArrayList<File>();
 
 	public static void main(String[] args) throws ParseException, IOException {
-		
-		
+
 		// Add Files need to be indexed
 		addFiles(new File(
 				"/Users/Azira/Documents/WebSearchDrama/Halyuuu/src/com/halyuuu/client/data/"));
 
 		// Remember to comment if already have index
-		//indexList();
+		// indexList();
 
 		// creating the Searcher to the same index location as the Indexer
 		Searcher searcher = new Searcher(INDEX_DIR);
 
-		List<indexDrama> result = searcher.findByTitle("Gentleman's",
-				DEFAULT_RESULT_SIZE);
-		print(result);
+		String query = "wintor sonate";
+		// Spell check query
+		spellCheck checker = new spellCheck(INDEX_DIR);
+		List spellCheck = checker.correctWords(query, searcher);
+		if (spellCheck != null) {
+			System.out.println("The Query was: " + query);
+			System.out.println("Do you mean: ");
+			Iterator spellCheckr = spellCheck.iterator();
+	        while (spellCheckr.hasNext()) {  
+	        	System.out.println(spellCheckr.next() + "");  
+	 
+	        }  
 
+		} else {
+			List<indexDrama> result = searcher.findByTitle(query,
+					DEFAULT_RESULT_SIZE);
+			print(result);
+
+		}
 		searcher.close();
-
 	}
 
 	private static void indexList() throws IOException {
@@ -56,21 +80,21 @@ public class Main {
 		// Each file, index line by line
 		for (File f : queue) {
 			FileReader file = null;
-		
+
 			try {
-				Document doc = new Document();
-				
+
 				file = new FileReader(f);
 				FileInputStream fstream = new FileInputStream(f);
 				// Get the object of DataInputStream
 				DataInputStream in = new DataInputStream(fstream);
+				@SuppressWarnings("resource")
 				BufferedReader dramaList = new BufferedReader(
 						new InputStreamReader(in));
 				String drama;
 				// Read File Line By Line
-				
+
 				while ((drama = dramaList.readLine()) != null) {
-				
+
 					if (drama.contains("/**")) {
 						continue;
 					}
@@ -94,7 +118,9 @@ public class Main {
 
 		// close the index to enable them index
 		indexer.close();
+
 	}
+
 	/**
 	 * print the results.
 	 */
@@ -119,7 +145,7 @@ public class Main {
 			String filename = file.getName().toLowerCase();
 			if (filename.endsWith(".txt")) {
 				queue.add(file);
-			} 
+			}
 		}
 	}
 }

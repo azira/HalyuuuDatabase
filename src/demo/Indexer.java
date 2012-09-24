@@ -23,6 +23,7 @@ public class Indexer
         writer = new IndexWriter(FSDirectory.open(
                 new File(indexDir)), new IndexWriterConfig(Version.LUCENE_36, new StandardAnalyzer(Version.LUCENE_36)));
         }
+       
     }
 
     /** 
@@ -36,9 +37,9 @@ public class Indexer
         Document doc = new Document();
 
        
-        doc.add(new Field(indexDrama.TITLE, indexItem.getTitle(), Field.Store.YES, Field.Index.ANALYZED));
+        doc.add(new Field(indexDrama.TITLE, indexItem.getTitle(), Field.Store.YES, Field.Index.ANALYZED)); 
         doc.add(new Field(indexDrama.WEBURL, indexItem.getweburl(), Field.Store.YES, Field.Index.ANALYZED));
-
+        doc.setBoost(1.5f);
         // add the document to the index
         writer.addDocument(doc);
     }

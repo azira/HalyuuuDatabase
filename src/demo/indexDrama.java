@@ -5,7 +5,7 @@ public class indexDrama {
 
     private String title;
     private String weburl;
-
+    private float score;
   
     public static final String TITLE = "title";
     public static final String WEBURL = "weburl";
@@ -20,7 +20,7 @@ public class indexDrama {
     public String getTitle() {
         return title;
     }
-
+ 
     public String getweburl() {
         return weburl;
     }
