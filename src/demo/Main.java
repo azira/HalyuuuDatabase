@@ -11,16 +11,6 @@ package demo;
  * Credit: http://lucene.apache.org/core/
  */
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.search.spell.Dictionary;
-import org.apache.lucene.search.spell.LuceneDictionary;
-import org.apache.lucene.search.spell.PlainTextDictionary;
-import org.apache.lucene.search.spell.SpellChecker;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -33,6 +23,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.lucene.queryParser.ParseException;
 
 public class Main {
 
@@ -53,7 +45,7 @@ public class Main {
 		// creating the Searcher to the same index location as the Indexer
 		Searcher searcher = new Searcher(INDEX_DIR);
 
-		String query = "wintor sonate";
+		String query = "18";
 		// Spell check query
 		spellCheck checker = new spellCheck(INDEX_DIR);
 		List spellCheck = checker.correctWords(query, searcher);
@@ -132,6 +124,11 @@ public class Main {
 		}
 	}
 
+	/** 
+	 * Add files under directory
+	 * 
+	 * @param file
+	 */
 	private static void addFiles(File file) {
 
 		if (!file.exists()) {

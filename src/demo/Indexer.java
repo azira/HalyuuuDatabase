@@ -27,7 +27,7 @@ public class Indexer
     }
 
     /** 
-      * This method will add the items into index
+      * Indexing items
       */
     public void index(indexDrama indexItem) throws IOException {
 

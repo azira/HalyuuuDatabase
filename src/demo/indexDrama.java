@@ -1,11 +1,18 @@
 package demo;
 
+/**
+ * 
+ * @author Hazirah
+ * POJO Class to create index drama
+ *
+ */
+
 public class indexDrama {
 
 
     private String title;
     private String weburl;
-    private float score;
+    
   
     public static final String TITLE = "title";
     public static final String WEBURL = "weburl";
